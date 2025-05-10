@@ -1,0 +1,62 @@
+body {
+    background-color: #f0f4f8;
+    font-family: "Helvetica Neue", sans-serif;
+}
+
+.navbar {
+    background: linear-gradient(90deg, #1e88e5, #42a5f5);
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.navbar-brand {
+    color: #fff !important;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.logo {
+    height: 32px;
+    margin-right: 8px;
+}
+
+.sidebar {
+    min-height: 500px;
+    background-color: #e3f2fd;
+    border-right: 1px solid #bbdefb;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.search-bar {
+    margin-bottom: 20px;
+}
+
+.book-card {
+    margin-bottom: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.card-title {
+    color: #1565c0;
+    font-weight: 600;
+}
+
+.list-group-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #bbdefb;
+}
