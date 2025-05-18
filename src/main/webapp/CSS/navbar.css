@@ -1,0 +1,20 @@
+body {
+    padding-top: 78px;
+}
+
+.navbar {
+    background-color: #1dfd0d;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: cyan;
+}
+
+.navbar-nav .nav-link {
+    color: blue;
+}
+
+.navbar-nav .nav-link:hover {
+    color: blueviolet;
+}

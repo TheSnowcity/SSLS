@@ -1,23 +1,27 @@
 package com.snowcity.ssls.domain;
-
+import java.util.Date;
 public class Category {
-    private int id;         // 分类ID
-    private String name;    // 分类名称
+    private Integer id;
+    private String code;
+    private String name;
 
-    public Category() {}
-
-    public Category(int id, String name) {
-        this.id = id;
-        this.name = name;
+    public Category() {
     }
 
-    // Getter 和 Setter
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
