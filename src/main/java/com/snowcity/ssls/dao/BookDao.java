@@ -71,6 +71,11 @@ public class BookDao {
             return bookList;
         }
     }
+
+    public void updateBook(Book book) {
+        String sql = "UPDATE Book SET status = ? WHERE id = ?";
+        template.update(sql, book.getStatus(), book.getId());
+    }
 }
 
 

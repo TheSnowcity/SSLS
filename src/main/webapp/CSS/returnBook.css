@@ -1,0 +1,179 @@
+/* 基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+.returnBook-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+    width: 100%;
+    max-width: 700px;
+    transition: all 0.3s ease;
+}
+
+.returnBook-container:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 3px;
+    width: 60px;
+    background-color: #3498db;
+    border-radius: 3px;
+}
+
+/* 图书信息区域 */
+.book-info {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    margin-bottom: 30px;
+    transition: all 0.2s ease;
+}
+
+.book-info:hover {
+    transform: translateY(-2px);
+    background-color: #f1f3f5;
+}
+
+.book-image {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.book-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.book-info p {
+    margin: 8px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.book-info strong {
+    color: #f33036;
+    font-weight: 600;
+}
+
+/* 警告信息 */
+.notice {
+    color: #e74c3c;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    display: inline-block;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+}
+
+/* 错误提示 */
+p[style*="color: red"] {
+    color: #e74c3c !important;
+    background-color: #ffebee;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 20px;
+    border: 1px solid #ffcdd2;
+}
+
+/* 按钮样式 */
+.action-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.action-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+/* 响应式设计 */
+@media (max-width: 576px) {
+    .book-info {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .book-info div {
+        margin-left: 0 !important;
+        margin-top: 20px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+}

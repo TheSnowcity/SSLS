@@ -3,58 +3,16 @@
 <html>
 <head>
     <title>图书管理系统 - 登录</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .login-container {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-title {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        .btn-login {
-            width: 100%;
-            padding: 10px;
-            background-color: #4fcfec;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .btn-login:hover {
-            background-color: #42c2e8;
-        }
-        .error-message {
-            color: red;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-    </style>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="${ctx}/css/navbar.css">
+    <link rel="stylesheet" href="${ctx}/css/login.css">
 </head>
 <body>
+<%@ include file="header2.jsp"%>
 <div class="login-container">
     <h2 class="login-title">图书管理系统登录</h2>
 

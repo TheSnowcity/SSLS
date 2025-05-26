@@ -22,7 +22,7 @@ public class Shelf {
     public void add(int id){
         BookDao bookDao = new BookDao();
         Book book = bookDao.getById(id);
-        ShelfItem shelfItem = new ShelfItem(id, book.getName(), book.getAuthors(),book.getPress(),book.getImageUrl());
+        ShelfItem shelfItem = new ShelfItem(id, book.getName(), book.getAuthors(),book.getPress(),book.getImageUrl(), book.getPublishDate());
         boolean foundFlag = false;
         for (ShelfItem item : this.shelfItemList) {
             if (item.getId() == id) {
@@ -36,10 +36,20 @@ public class Shelf {
         }
     }
 
-    public void remove(int id){
-        for (ShelfItem item : this.shelfItemList) {
+//    public void remove(int id){
+//        for (ShelfItem item : this.shelfItemList) {
+//            if (item.getId() == id) {
+//                this.shelfItemList.remove(item);
+//                break;
+//            }
+//        }
+//    }
+// 修改后的remove方法
+    public void remove(int id) {
+        for (int i = this.shelfItemList.size() - 1; i >= 0; i--) {
+            ShelfItem item = this.shelfItemList.get(i);
             if (item.getId() == id) {
-                this.shelfItemList.remove(item);
+                this.shelfItemList.remove(i);
                 break;
             }
         }

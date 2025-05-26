@@ -1,21 +1,24 @@
 package com.snowcity.ssls.domain;
 
+import java.time.LocalDate;
+
 public class ShelfItem {
     private int id;
     private String name;
     private String authors;
     private String press;
     private String imageUrl;
-
+    private  LocalDate publishDate;
     public ShelfItem() {
     }
 
-    public ShelfItem(int id, String name, String authors, String press, String imageUrl) {
+    public ShelfItem(int id, String name, String authors, String press, String imageUrl, LocalDate publishDate) {
         this.id = id;
         this.name = name;
         this.authors = authors;
         this.press = press;
         this.imageUrl = imageUrl;
+        this.publishDate=publishDate;
     }
 
     public int getId() {
@@ -56,5 +59,13 @@ public class ShelfItem {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(LocalDate publishDate) {
+        this.publishDate = publishDate;
     }
 }

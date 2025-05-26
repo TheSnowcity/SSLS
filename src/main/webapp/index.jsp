@@ -1,12 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<%--<%@ include file="header.jsp"%>--%>
-<%@ include file="header.jsp"%>
 <!DOCTYPE html>
 <html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图书馆管理系统</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-
+    <link rel="stylesheet" href="${ctx}/css/navbar.css">
+    <link rel="stylesheet" href="${ctx}/css/index.css">
+</head>
+<body>
+<%@ include file="header2.jsp"%>
 <!-- 主内容区域 -->
 <main class="container mt-4">
     <div class="row">
@@ -28,7 +38,7 @@
                 <ul class="category-list">
                     <li class="active"><a href="${ctx}/IndexServlet">全部</a></li>
                     <li><a href="${ctx}/IndexServlet?status=在库">可借阅</a></li>
-                    <li><a href="${ctx}/IndexServlet?status=借出">已借出</a></li>
+                    <li><a href="${ctx}/IndexServlet?status=已借出">已借出</a></li>
                 </ul>
             </div>
         </div>
@@ -54,11 +64,10 @@
 
             <!-- 图书列表 -->
             <div class="book-list">
-                <!-- 动态生成图书列表 -->
                 <c:forEach items="${bookList}" var="book">
                     <div class="book-item">
                         <div class="book-cover">
-                            <img src="${ctx}${book.imageUrl}" alt="数据结构与算法">
+                            <img src="${ctx}${book.imageUrl}" alt="${book.name}">
                         </div>
                         <div class="book-content">
                             <div class="book-title">${book.name}</div>
@@ -70,53 +79,42 @@
                         </div>
                         <div class="book-actions">
                             <div class="book-status">
-                                <span class="badge bg-success">${book.status}</span>
+                                <!-- 根据状态动态切换徽章颜色 -->
+                                <c:choose>
+                                    <c:when test="${book.status == '在库'}">
+                                        <span class="badge bg-success">${book.status}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="badge status-borrowed">${book.status}</span> <!-- 已借出状态 -->
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <div class="book-buttons">
-                                <a href="${ctx}/DetailServlet?id=${book.id}"><button class="btn btn-sm btn-outline-primary me-1"><i class="fa fa-eye"></i> 详情</button></a>
-                                <a href="${ctx}/AddToShelfServlet?id=${book.id}"><button class="btn btn-sm btn-primary"><i class="fa fa-book"></i> 借阅</button></a>
+                                <a href="${ctx}/DetailServlet?id=${book.id}" style="text-decoration: none">
+                                    <button class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="fa fa-eye"></i> 详情
+                                    </button>
+                                </a>
+
+                                <!-- 根据状态禁用借阅按钮 -->
+                                <c:choose>
+                                    <c:when test="${book.status == '在库'}">
+                                        <a href="${ctx}/AddToShelfServlet?id=${book.id}">
+                                            <button class="btn btn-sm btn-primary">
+                                                <i class="fa fa-book"></i> 借阅
+                                            </button>
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button class="btn btn-sm btn-primary btn-disabled">
+                                            <i class="fa fa-book"></i> 已借出
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
-                <%--                <!-- 图书1 -->--%>
-                <%--                <div class="book-item">--%>
-                <%--                    <div class="book-cover" style="background-image: url('https://picsum.photos/seed/book1/200/300');"></div>--%>
-                <%--                    <div class="book-content">--%>
-                <%--                        <div class="book-title">Python数据分析实战</div>--%>
-                <%--                        <div class="book-details">--%>
-                <%--                            <p><i class="fa fa-user me-1"></i> 张三</p>--%>
-                <%--                            <p><i class="fa fa-calendar me-1"></i> 2023-05-15</p>--%>
-                <%--                            <p><i class="fa fa-building me-1"></i> 电子工业出版社</p>--%>
-                <%--                        </div>--%>
-                <%--                    </div>--%>
-                <%--                    <div class="book-actions">--%>
-                <%--                        <div class="book-status">--%>
-                <%--                            <span class="badge bg-success">可借阅</span>--%>
-                <%--                        </div>--%>
-                <%--                        <div class="book-buttons">--%>
-                <%--                            <button class="btn btn-sm btn-outline-primary me-1"><i class="fa fa-eye"></i> 详情</button>--%>
-                <%--                            <button class="btn btn-sm btn-primary"><i class="fa fa-book"></i> 借阅</button>--%>
-                <%--                        </div>--%>
-                <%--                    </div>--%>
-                <%--                </div>--%>
-                <%--                <!-- 图书1 -->--%>
-                <%--                <div class="book-item">--%>
-                <%--                    <div class="book-title">Python数据分析实战</div>--%>
-                <%--                    <div class="book-details">--%>
-                <%--                        <p><i class="fa fa-user me-1"></i> 张三</p>--%>
-                <%--                        <p><i class="fa fa-calendar me-1"></i> 2023-05-15</p>--%>
-                <%--                        <p><i class="fa fa-building me-1"></i> 电子工业出版社</p>--%>
-                <%--                    </div>--%>
-                <%--                    <div class="book-actions">--%>
-                <%--                        <span class="badge bg-success">可借阅</span>--%>
-                <%--                        <div>--%>
-                <%--                            <button class="btn btn-sm btn-outline-primary me-1"><i class="fa fa-eye"></i> 详情</button>--%>
-                <%--                            <button class="btn btn-sm btn-primary"><i class="fa fa-book"></i> 借阅</button>--%>
-                <%--                        </div>--%>
-                <%--                    </div>--%>
-                <%--                </div>--%>
-
             </div>
 
             <!-- 分页 -->
@@ -143,11 +141,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- 自定义脚本 -->
 <script>
-    // 登录注册链接点击事件
-    document.getElementById('loginLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('登录功能将在后续版本中实现');
-    });
 
     document.getElementById('registerLink').addEventListener('click', function(e) {
         e.preventDefault();

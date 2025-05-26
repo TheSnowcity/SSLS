@@ -42,7 +42,7 @@ CREATE TABLE Borrow (
     book_id INT NOT NULL,
     reader_id INT NOT NULL,
     due_date DATETIME NOT NULL,
-    return_date DATETIME NOT NULL,
+    return_date DATETIME NULL,
     status VARCHAR(50) NOT NULL,
     FOREIGN KEY (book_id) REFERENCES Book(id),
     FOREIGN KEY (reader_id) REFERENCES Reader(id)
@@ -104,3 +104,16 @@ INSERT INTO Reader (userType, name, username, password, email, phone) VALUES
 ('教师', '李四', 'lisi', '654321', 'lisi@example.com', '13900000000'),
 ('职工', '王五', 'wangwu', 'abcdef', 'wangwu@example.com', '13600000000'),
 ('学生', '赵六', 'zhaoliu', 'fedcba', 'zhaoliu@example.com', '13700000000');
+
+-- 第一步：删除原有 DATE 类型的 borrow_date 字段
+ALTER TABLE borrow DROP COLUMN borrow_date;
+
+-- 第二步：新增 DATETIME 类型的 borrow_date 字段（默认值为当前时间）
+ALTER TABLE borrow
+    ADD COLUMN borrow_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '借阅日期（含时间）';
+
+-- 修改字段类型为 DATETIME（包含日期和时间）
+ALTER TABLE borrow
+    MODIFY COLUMN due_date DATE NOT NULL,
+    MODIFY COLUMN return_date DATE DEFAULT NULL,
+    MODIFY COLUMN borrow_date DATE NOT NULL ;

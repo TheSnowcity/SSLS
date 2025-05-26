@@ -1,11 +1,5 @@
 body {
-    padding-top: 56px; /* é¡¶éƒ¨å¯¼èˆªæ é«˜åº¦ */
-}
-
-.container {
-    max-width: 1200px;
-    margin: 10px auto;
-    padding: 0 15px;
+    padding-top: 56px; /* ¶¥²¿µ¼º½À¸¸ß¶È */
 }
 
 .navbar {
@@ -127,7 +121,7 @@ body {
     margin-top: 30px;
 }
 
-/* å“åº”å¼è°ƒæ•´ */
+/* ÏìÓ¦Ê½µ÷Õû */
 @media (max-width: 768px) {
     .sidebar {
         border-right: none;
@@ -193,4 +187,16 @@ body {
 .custom-search-btn:focus {
     outline: none;
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.5);
+}
+
+/* ĞÂÔö£ºÒÑ½è³ö×´Ì¬ÑùÊ½ */
+.status-borrowed {
+    background-color: #dc3545 !important; /* ºìÉ« */
+}
+
+/* ½ûÓÃ°´Å¥ÑùÊ½ÓÅ»¯ */
+.btn-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
 }
