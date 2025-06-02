@@ -1,7 +1,7 @@
-package com.wyx.servlet;
+package com.snowcity.ssls.servlet;
 
-import com.wyx.dao.BookDao;
-import com.wyx.domain.Book;
+import com.snowcity.ssls.dao.BookDao;
+import com.snowcity.ssls.domain.Book;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
