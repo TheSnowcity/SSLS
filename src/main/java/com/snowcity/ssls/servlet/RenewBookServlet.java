@@ -2,7 +2,10 @@ package com.snowcity.ssls.servlet;
 
 
 import com.snowcity.ssls.dao.BorrowDao;
+import com.snowcity.ssls.dao.FineDao;
 import com.snowcity.ssls.domain.Borrow;
+import com.snowcity.ssls.domain.Fine;
+import com.snowcity.ssls.domain.Reader;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet(name = "RenewBookServlet", value = "/RenewBookServlet")
 public class RenewBookServlet extends HttpServlet {
@@ -21,6 +25,24 @@ public class RenewBookServlet extends HttpServlet {
         // 设置编码
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+
+        // 从Session获取当前用户
+        Reader reader = (Reader) request.getSession().getAttribute("reader");
+        if (reader == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // 检查是否有未缴罚款
+        FineDao fineDao = new FineDao();
+        List<Fine> unpaidFines = fineDao.getUnpaidFinesByReaderId(reader.getId());
+        if (!unpaidFines.isEmpty()) {
+            request.getSession().setAttribute("error", "请先缴纳未处理的罚款再进行借阅/续借操作");
+//            request.getRequestDispatcher(request.getContextPath() + "/bookManage.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/BorrowManageServlet");
+            return;
+        }
+
 
         try {
             // 1. 获取参数

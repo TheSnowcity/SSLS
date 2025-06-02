@@ -2,7 +2,7 @@ package com.snowcity.ssls.dao;
 
 
 import com.snowcity.ssls.domain.Borrow;
-import com.snowcity.ssls.util.JDBCUtils;
+import com.snowcity.ssls.utils.JDBCUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,15 +21,7 @@ public class BorrowDao {
         template.update(sql, borrow.getBook_id(), borrow.getReader_id(), borrow.getDue_date(), borrow.getReturn_date(), borrow.getStatus(), borrow.getBorrow_date());
     }
 
-//    public List<Borrow> getBorrowingByReaderId(int readerId) {
-//        String sql = "SELECT b.*, book.name, book.imageUrl " +
-//                "FROM Borrow b " +
-//                "JOIN Book ON b.book_id = Book.id " +
-//                "WHERE b.reader_id = ? AND b.status = '已借出'";
-//        List<Borrow> list =template.query(sql, new BeanPropertyRowMapper<>(Borrow.class), readerId);
-//        System.out.println("借阅记录数量：" + list.size()); // 若为 0，说明未查询到数据
-//        return template.query(sql, new BeanPropertyRowMapper<>(Borrow.class), readerId);
-//    }
+
     public List<Borrow> getBorrowingByReaderId(int readerId) {
         String sql = "SELECT b.*, book.name, book.imageUrl " +
                 "FROM Borrow b " +
@@ -39,24 +31,7 @@ public class BorrowDao {
         System.out.println("借阅记录数量：" + list.size()); // 若为 0，说明未查询到数据
         return template.query(sql, new BeanPropertyRowMapper<>(Borrow.class), readerId);
     }
-    // 在BorrowDao中添加根据ID查询借阅记录的方法
-//    public Borrow getBorrowById(int borrowId) {
-//        String sql = "SELECT b.*, book.name, book.imageUrl " +
-//                "FROM Borrow b " +
-//                "JOIN Book ON b.book_id = Book.id " +
-//                "WHERE b.id = ?";
-//        return template.queryForObject(sql, new BeanPropertyRowMapper<>(Borrow.class), borrowId);
-//    }
-    // 通过 borrowId 查询借阅记录（包含图书信息）
-//    public Borrow getBorrowById(int borrowId) {
-//        String sql = "SELECT " +
-//                "b.id, b.book_id, b.reader_id, b.due_date, b.return_date, b.borrow_date, " +
-//                "book.name AS book_name, book.imageUrl AS book_imageUrl " + // 别名与 Borrow 类属性匹配
-//                "FROM Borrow b " +
-//                "JOIN Book ON b.book_id = Book.id " +
-//                "WHERE b.id = ?";
-//        return template.queryForObject(sql, new BeanPropertyRowMapper<>(Borrow.class), borrowId);
-//    }
+
     // 通过 borrowId 查询借阅记录，并关联 book 表获取图书信息
     public Borrow getBorrowById(int borrowId) {
         String sql = "SELECT " +
@@ -73,19 +48,24 @@ public class BorrowDao {
         }
     }
 
-//    // 添加更新借阅记录的方法
-//    public void updateBorrow(Borrow borrow) {
-//        String sql = "UPDATE Borrow SET return_date = ?, status = ? WHERE id = ?";
-//        template.update(sql, borrow.getReturn_date(), borrow.getStatus(), borrow.getId());
-//    }
-//    //扩展方法：更新数据库中的应还日期（due_date）
-//    private void updateDueDateInDatabase(Borrow borrow) {
-//        String sql = "UPDATE Borrow SET due_date = ? WHERE id = ?";
-//        template.update(sql, borrow.getDue_date(), borrow.getId());
-//    }
+
 // 在BorrowDao中修改updateBorrow方法
     public void updateBorrow(Borrow borrow) {
         String sql = "UPDATE Borrow SET due_date = ?, return_date = ?, status = ? WHERE id = ?";
         template.update(sql, borrow.getDue_date(), borrow.getReturn_date(), borrow.getStatus(), borrow.getId());
+    }
+
+    // 查询已归还的借阅记录 并按归还日期降序
+    public List<Borrow> getReturnedHistoriesByReaderId(int readerId, String orderBy) {
+        String sql = "SELECT b.*, book.name, book.imageUrl " +
+                "FROM Borrow b " +
+                "JOIN Book ON b.book_id = Book.id " +
+                "WHERE b.reader_id = ? AND b.status = '已归还' " +
+                "ORDER BY " + orderBy;
+        try {
+            return template.query(sql, new BeanPropertyRowMapper<>(Borrow.class), readerId);
+        } catch (Exception e) {
+            return null; // 无记录时返回 null
+        }
     }
 }

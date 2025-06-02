@@ -31,6 +31,18 @@
                         <a class="nav-link" href="${ctx}/BorrowManageServlet">我的借阅</a>
                     </c:if>
                 </li>
+
+                <!-- 罚款管理链接（添加登录校验和罚款数量显示） -->
+                <li class="nav-item">
+                    <c:if test="${empty reader}">
+                        <a class="nav-link" href="${ctx}/login.jsp?redirect=${ctx}/fineManage.jsp">我的罚款</a>
+                    </c:if>
+                    <c:if test="${not empty reader}">
+                        <a class="nav-link" href="${ctx}/FineManageServlet">
+                            我的罚款(<c:out value="${sessionScope.unpaidFineCount}"/>)
+                        </a>
+                    </c:if>
+                </li>
             </ul>
             <ul class="navbar-nav">
                 <c:if test="${empty reader}">
@@ -40,8 +52,9 @@
                 </c:if>
                 <c:if test="${!empty reader}">
                     <li class="nav-item">
-                        <a class="nav-link" href="${ctx}/ReaderServlet">
-                            欢迎：<b>${reader.username}</b>
+                        <a class="nav-link" href="${ctx}/readerIndex.jsp">
+<%--                            欢迎：<b>${reader.username}</b>--%>
+                            <i class="fa fa-user-circle me-1"></i> <b>${reader.username}</b>
                         </a>
                     </li>
                     <span style="color: white; padding: 8px 2px;">|</span>
@@ -53,7 +66,7 @@
 
                 &nbsp;&nbsp;
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="registerLink"><i class="fa fa-user-plus me-1"></i> 注册</a>
+                    <a class="nav-link" href="${ctx}/register.jsp" id="registerLink"><i class="fa fa-user-plus me-1"></i> 注册</a>
                 </li>
             </ul>
         </div>

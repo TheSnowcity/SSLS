@@ -1,8 +1,26 @@
+<%@ page import="com.wyx.domain.Reader" %>
+<%@ page import="com.wyx.dao.FineDao" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <%--<%@ include file="header.jsp"%>--%>
+
+<%-- 检查用户是否有未缴纳的罚款 --%>
+<%
+    Reader reader = (Reader) session.getAttribute("reader");
+    boolean hasUnpaidFines = false;
+
+    if (reader != null) {
+        FineDao fineDao = new FineDao();
+        int unpaidFineCount = fineDao.getUnpaidFinesByReaderId(reader.getId()).size();
+        hasUnpaidFines = unpaidFineCount > 0;
+        request.setAttribute("hasUnpaidFines", hasUnpaidFines);
+        request.setAttribute("unpaidFineCount", unpaidFineCount);
+    }
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +40,14 @@
 
 <form id="borrowForm" action="${ctx}/BorrowBooksServlet" method="post">
 <div class="shelf-container">
+    <!-- 未缴纳罚款提示 -->
+    <c:if test="${hasUnpaidFines}">
+        <div class="alert-fine">
+            <i class="fa fa-exclamation-circle"></i>
+            您有 <strong style="color: red">${unpaidFineCount}</strong> 笔未缴纳的罚款，请先<a href="${ctx}/FineManageServlet">缴纳罚款</a>再进行借阅或续借操作。
+        </div>
+    </c:if>
+
     <div class="shelf-header">
         <h2>我的暂存架</h2>
         <a href="${ctx}/IndexServlet" class="btn btn-outline">继续选书</a>
@@ -83,9 +109,21 @@
             </div>
             <div class="shelf-actions">
                 <a href="${ctx}/IndexServlet" class="btn btn-outline">继续选书</a>
-                <button type="submit" id="confirmBorrowBtn" class="btn btn-primary">
-                    确认借阅已选图书
-                </button>
+<%--                <button type="submit" id="confirmBorrowBtn" class="btn btn-primary">--%>
+<%--                    确认借阅已选图书--%>
+<%--                </button>--%>
+                <c:choose>
+                    <c:when test="${not hasUnpaidFines}">
+                        <button type="submit" id="confirmBorrowBtn" class="btn btn-primary">
+                            确认借阅已选图书
+                        </button>
+                    </c:when>
+                    <c:otherwise>
+                        <button type="submit" id="confirmBorrowBtn" class="btn btn-primary" style="opacity: 0.5" disabled>
+                            确认借阅已选图书
+                        </button>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
     </c:if>
@@ -102,12 +140,26 @@
         const borrowForm = document.getElementById('borrowForm');
 
         // 更新选中图书数量
+        // function updateSelectedCount() {
+        //     const selectedCount = document.querySelectorAll('.book-checkbox:checked').length;
+        //     selectedCountSpan.textContent = selectedCount;
+        //
+        //     // 禁用/启用确认借阅按钮
+        //     confirmBorrowBtn.disabled = selectedCount === 0;
+        // }
+        // 更新选中图书数量
         function updateSelectedCount() {
             const selectedCount = document.querySelectorAll('.book-checkbox:checked').length;
             selectedCountSpan.textContent = selectedCount;
 
-            // 禁用/启用确认借阅按钮
-            confirmBorrowBtn.disabled = selectedCount === 0;
+            // 同时检查选中数量和罚款状态
+            if (hasUnpaidFines) {
+                confirmBorrowBtn.disabled = true;
+                confirmBorrowBtn.title = '请先缴纳未处理的罚款';
+            } else {
+                confirmBorrowBtn.disabled = selectedCount === 0;
+                confirmBorrowBtn.title = '';
+            }
         }
 
         // 全选/取消全选功能

@@ -1,4 +1,5 @@
 package com.snowcity.ssls.domain;
+
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;

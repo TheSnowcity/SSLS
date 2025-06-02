@@ -1,7 +1,9 @@
 package com.snowcity.ssls.servlet;
 
 import com.snowcity.ssls.dao.BorrowDao;
+import com.snowcity.ssls.dao.FineDao;
 import com.snowcity.ssls.domain.Borrow;
+import com.snowcity.ssls.domain.Fine;
 import com.snowcity.ssls.domain.Reader;
 
 import javax.servlet.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @WebServlet(name = "BorrowManageServlet", value = "/BorrowManageServlet")
 public class BorrowManageServlet extends HttpServlet {
     BorrowDao borrowDao = new BorrowDao();
+    FineDao fineDao = new FineDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,6 +29,13 @@ public class BorrowManageServlet extends HttpServlet {
 
         // 查询当前用户的借阅记录（状态为"已借出"和"已归还"）
         List<Borrow> borrowList = borrowDao.getBorrowingByReaderId(reader.getId());
+
+        // 查询未处理罚款记录
+        List<Fine> unpaidFineList = fineDao.getUnpaidFinesByReaderId(reader.getId());
+        // 计算未处理罚款数量并存储到Session
+        int unpaidFineCount = unpaidFineList.size();
+        session.setAttribute("unpaidFineCount", unpaidFineCount);
+        session.setAttribute("unpaidFineList", unpaidFineList);
 
         // 将数据存入请求域
         request.setAttribute("borrowList", borrowList);

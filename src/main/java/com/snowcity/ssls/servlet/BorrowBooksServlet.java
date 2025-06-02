@@ -2,10 +2,8 @@ package com.snowcity.ssls.servlet;
 
 import com.snowcity.ssls.dao.BookDao;
 import com.snowcity.ssls.dao.BorrowDao;
-import com.snowcity.ssls.domain.Book;
-import com.snowcity.ssls.domain.Borrow;
-import com.snowcity.ssls.domain.Reader;
-import com.snowcity.ssls.domain.Shelf;
+import com.snowcity.ssls.dao.FineDao;
+import com.snowcity.ssls.domain.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -25,6 +23,16 @@ public class BorrowBooksServlet extends HttpServlet {
         Reader reader = (Reader) request.getSession().getAttribute("reader");
         if (reader == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+
+        // 检查是否有未缴罚款
+        FineDao fineDao = new FineDao();
+        List<Fine> unpaidFines = fineDao.getUnpaidFinesByReaderId(reader.getId());
+        if (!unpaidFines.isEmpty()) {
+            request.getSession().setAttribute("error", "请先缴纳未处理的罚款再进行借阅/续借操作");
+//            request.getRequestDispatcher("bookManage.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/shelf.jsp");
             return;
         }
 

@@ -3,7 +3,7 @@ package com.snowcity.ssls.dao;
 
 
 import com.snowcity.ssls.domain.Book;
-import com.snowcity.ssls.util.JDBCUtils;
+import com.snowcity.ssls.utils.JDBCUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.List;

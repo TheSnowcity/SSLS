@@ -1,4 +1,5 @@
 package com.snowcity.ssls.domain;
+
 import java.util.Date;
 public class Category {
     private Integer id;

@@ -6,6 +6,22 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <%@ page import="com.wyx.dao.FineDao" %>
 <%@ page import="com.wyx.domain.Fine" %>
+<%@ page import="com.wyx.domain.Reader" %>
+
+<%-- 检查用户是否有未缴纳的罚款 --%>
+<%
+    Reader reader = (Reader) session.getAttribute("reader");
+    boolean hasUnpaidFines = false;
+
+    if (reader != null) {
+        FineDao fineDao = new FineDao();
+        int unpaidFineCount = fineDao.getUnpaidFinesByReaderId(reader.getId()).size();
+        hasUnpaidFines = unpaidFineCount > 0;
+        request.setAttribute("hasUnpaidFines", hasUnpaidFines);
+        request.setAttribute("unpaidFineCount", unpaidFineCount);
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +39,30 @@
 <body>
 <%@ include file="header2.jsp"%>
 <div class="borrow-container">
+
+    <!-- 未缴纳罚款提示 -->
+    <c:if test="${hasUnpaidFines}">
+        <div class="alert-fine">
+            <i class="fa fa-exclamation-circle"></i>
+            您有 <strong style="color: red">${unpaidFineCount}</strong> 笔未缴纳的罚款，请先<a href="${ctx}/FineManageServlet">缴纳罚款</a>再进行借阅或续借操作。
+        </div>
+    </c:if>
+
     <h2>我的借阅记录</h2>
+
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-light bg-light mb-4">
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" href="${ctx}/BorrowManageServlet">所有借阅</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${ctx}/BorrowHistoryServlet">借阅历史</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     <c:if test="${empty borrowList}">
         <p>您当前没有借阅的图书</p>
@@ -37,6 +76,7 @@
                 <th>图书名称</th>
                 <th>借阅日期</th>
                 <th>应还日期</th>
+                <th>归还日期</th>
                 <th>当前状态</th>
                 <th>罚款信息</th>
                 <th>操作</th>
@@ -50,6 +90,7 @@
                     <td>${borrow.name}</td>
                     <td>${borrow.borrow_date}</td>
                     <td>${borrow.due_date}</td>
+                    <td>${borrow.return_date}</td>
                     <td>
                         <c:if test="${borrow.return_date != null}">
                             <span class="is-returned">已归还</span>
@@ -85,9 +126,19 @@
                             <a href="${ctx}/ReturnBookServlet?borrowId=${borrow.id}" class="return-btn">归还</a>
 
                             <!-- 续借按钮：仅未超期时显示，跳转至确认页面 -->
-                            <c:if test="${not borrow.overdue}">
-                                <a href="${ctx}/RenewBookServlet?borrowId=${borrow.id}" class="renew-btn">续借</a>
-                            </c:if>
+<%--                            <c:if test="${not borrow.overdue}">--%>
+<%--                                <a href="${ctx}/RenewBookServlet?borrowId=${borrow.id}" class="renew-btn">续借</a>--%>
+<%--                            </c:if>--%>
+                            <!-- 续借按钮 -->
+                            <c:choose>
+                                <c:when test="${not borrow.overdue and not hasUnpaidFines}">
+                                    <a href="${ctx}/RenewBookServlet?borrowId=${borrow.id}" class="renew-btn">续借</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="${ctx}/RenewBookServlet?borrowId=${borrow.id}" class="renew-btn-disabled">续借</a>
+                                </c:otherwise>
+                            </c:choose>
+
                         </c:if>
 
                         <!-- 罚款缴纳按钮 -->
@@ -95,7 +146,8 @@
                             <c:set var="fineDao" value="<%= new FineDao() %>" />
                             <c:set var="fine" value="${fineDao.getFineByBorrowId(borrow.id)}" />
                             <c:if test="${fine != null and fine.payment_status eq '未处理'}">
-                                <a href="${ctx}/PayFineServlet?fineId=${fine.id}" class="pay-btn">缴纳</a>
+<%--                                <a href="${ctx}/PayFineServlet?fineId=${fine.id}" class="pay-btn">缴纳</a>--%>
+                                <a href="${ctx}/payFine.jsp?fineId=${fine.id}" class="pay-btn">缴纳</a>
                             </c:if>
                         </c:if>
                     </td>

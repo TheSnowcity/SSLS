@@ -117,3 +117,18 @@ ALTER TABLE borrow
     MODIFY COLUMN due_date DATE NOT NULL,
     MODIFY COLUMN return_date DATE DEFAULT NULL,
     MODIFY COLUMN borrow_date DATE NOT NULL ;
+
+-- 1. 添加 DATE 类型列
+ALTER TABLE reader ADD COLUMN register_date DATE;
+
+-- 2. 创建触发器自动填充日期
+DELIMITER $$
+CREATE TRIGGER set_register_date
+    BEFORE INSERT ON reader
+    FOR EACH ROW
+BEGIN
+    IF NEW.register_date IS NULL THEN
+        SET NEW.register_date = CURDATE();
+END IF;
+END$$
+DELIMITER ;

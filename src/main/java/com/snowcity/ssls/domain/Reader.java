@@ -1,4 +1,6 @@
 package com.snowcity.ssls.domain;
+
+import java.time.LocalDate;
 import java.util.Date;
 public class Reader {
     private int id;
@@ -8,7 +10,13 @@ public class Reader {
     private String password;
     private String email;
     private String phone;
+    private String gender;       // 新增：性别
+    private LocalDate registerDate;   // 新增：注册日期
+    private double balance;      // 新增：账户余额
 
+    public boolean verifyPassword(String password){
+        return this.password.equals(password);
+    }
 
     public Reader() {
     }
@@ -67,5 +75,29 @@ public class Reader {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public LocalDate getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(LocalDate registerDate) {
+        this.registerDate = registerDate;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 }

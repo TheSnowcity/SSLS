@@ -6,15 +6,17 @@ import com.snowcity.ssls.dao.FineDao;
 import com.snowcity.ssls.domain.Borrow;
 import com.snowcity.ssls.domain.Book;
 import com.snowcity.ssls.domain.Fine;
-import com.snowcity.ssls.util.JDBCUtils;
+import com.snowcity.ssls.utils.JDBCUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 @WebServlet("/ReturnBookServlet")
 public class ReturnBookServlet extends HttpServlet {
@@ -67,6 +69,10 @@ public class ReturnBookServlet extends HttpServlet {
                 fine.setBorrow_id(borrowId);
                 fine.setPenalty_amount(penalty);
                 fineDao.createFine(fine); // 生成罚款记录
+
+                HttpSession session= request.getSession();
+                List<Fine> unpaidFineList = fineDao.getUnpaidFinesByReaderId(borrow.getReader_id());
+                session.setAttribute("unpaidFineCount", unpaidFineList.size());
             }
 
             // 重定向到"我的借阅"页面（直接跳转JSP或通过Servlet）

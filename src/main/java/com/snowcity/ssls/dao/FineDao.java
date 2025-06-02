@@ -1,7 +1,7 @@
 package com.snowcity.ssls.dao;
 
 import com.snowcity.ssls.domain.Fine;
-import com.snowcity.ssls.util.JDBCUtils;
+import com.snowcity.ssls.utils.JDBCUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -44,12 +44,32 @@ public class FineDao {
         }
     }
 
-    // 根据读者 ID 查询罚款记录（通过 borrow 表关联）
+    // 根据读者 ID 查询全部罚款记录（通过 borrow 表关联）
     public List<Fine> getFinesByReaderId(int readerId) {
         String sql = "SELECT f.* " +
                 "FROM Fine f " +
                 "JOIN Borrow b ON f.borrow_id = b.id " + // 关联 borrow 表
                 "WHERE b.reader_id = ?"; // 通过 reader_id 过滤
+        return template.query(sql, new BeanPropertyRowMapper<>(Fine.class), readerId);
+    }
+
+    // 根据读者ID查询未处理的罚款记录
+    public List<Fine> getUnpaidFinesByReaderId(int readerId) {
+        String sql = "SELECT f.* " +
+                "FROM Fine f " +
+                "JOIN Borrow b ON f.borrow_id = b.id " +
+                "WHERE b.reader_id = ? " +
+                "AND f.payment_status = '未处理'"; // 添加状态过滤
+        return template.query(sql, new BeanPropertyRowMapper<>(Fine.class), readerId);
+    }
+
+    // 根据读者ID查询已缴纳的罚款记录
+    public List<Fine> getPaidFinesByReaderId(int readerId) {
+        String sql = "SELECT f.* " +
+                "FROM Fine f " +
+                "JOIN Borrow b ON f.borrow_id = b.id " +
+                "WHERE b.reader_id = ? " +
+                "AND f.payment_status = '已缴纳'"; // 添加状态过滤
         return template.query(sql, new BeanPropertyRowMapper<>(Fine.class), readerId);
     }
 }

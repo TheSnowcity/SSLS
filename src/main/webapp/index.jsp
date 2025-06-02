@@ -7,10 +7,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书馆管理系统</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style" onload="this.rel='stylesheet'">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" as="style" onload="this.rel='stylesheet'">
+<%--    <!-- Bootstrap CSS -->--%>
+<%--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">--%>
+<%--    <!-- Font Awesome -->--%>
+<%--    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">--%>
 
     <link rel="stylesheet" href="${ctx}/css/navbar.css">
     <link rel="stylesheet" href="${ctx}/css/index.css">
@@ -141,22 +143,22 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- 自定义脚本 -->
 <script>
-
-    document.getElementById('registerLink').addEventListener('click', function(e) {
-        e.preventDefault();
-        alert('注册功能将在后续版本中实现');
-    });
+    
+    // document.getElementById('registerLink').addEventListener('click', function(e) {
+    //     e.preventDefault();
+    //     alert('注册功能将在后续版本中实现');
+    // });
 
     // 分类点击事件
     document.querySelectorAll('.category-list li a').forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
             // 移除当前活动状态
             this.parentElement.parentElement.querySelectorAll('li.active').forEach(li => {
                 li.classList.remove('active');
             });
             // 设置当前项为活动状态
             this.parentElement.classList.add('active');
+            // 不阻止默认行为，让链接正常跳转
         });
     });
 </script>
